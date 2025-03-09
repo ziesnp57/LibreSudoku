@@ -70,7 +70,6 @@ import com.kaajjo.libresudoku.core.PreferencesConstants
 import com.kaajjo.libresudoku.core.qqwing.GameType
 import com.kaajjo.libresudoku.core.qqwing.advanced_hint.AdvancedHintData
 import com.kaajjo.libresudoku.core.utils.SudokuParser
-import com.kaajjo.libresudoku.destinations.SettingsAdvancedHintScreenDestination
 import com.kaajjo.libresudoku.destinations.SettingsCategoriesScreenDestination
 import com.kaajjo.libresudoku.ui.components.AdvancedHintContainer
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
@@ -81,7 +80,6 @@ import com.kaajjo.libresudoku.ui.game.components.NotesMenu
 import com.kaajjo.libresudoku.ui.game.components.ToolBarItem
 import com.kaajjo.libresudoku.ui.game.components.ToolbarItem
 import com.kaajjo.libresudoku.ui.game.components.UndoRedoMenu
-import com.kaajjo.libresudoku.ui.onboarding.FirstGameDialog
 import com.kaajjo.libresudoku.ui.util.ReverseArrangement
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -138,12 +136,7 @@ fun GameScreen(
 
     if (firstGame) {
         viewModel.pauseTimer()
-        FirstGameDialog(
-            onFinished = {
-                viewModel.setFirstGameFalse()
-                viewModel.startTimer()
-            }
-        )
+
     }
 
     var restartButtonAngleState by remember { mutableFloatStateOf(0f) }
@@ -387,9 +380,7 @@ fun GameScreen(
                                 viewModel.cancelAdvancedHint()
                             },
                             onSettingsClick = {
-                                navigator.navigate(
-                                    SettingsAdvancedHintScreenDestination
-                                )
+
                             }
                         )
                     }
@@ -409,9 +400,7 @@ fun GameScreen(
                                 viewModel.cancelAdvancedHint()
                             },
                             onSettingsClick = {
-                                navigator.navigate(
-                                    SettingsAdvancedHintScreenDestination
-                                )
+
                             }
                         )
                     }

@@ -66,13 +66,10 @@ import com.kaajjo.libresudoku.core.update.Release
 import com.kaajjo.libresudoku.core.update.UpdateUtil
 import com.kaajjo.libresudoku.destinations.AboutScreenDestination
 import com.kaajjo.libresudoku.destinations.AutoUpdateScreenDestination
-import com.kaajjo.libresudoku.destinations.BackupScreenDestination
-import com.kaajjo.libresudoku.destinations.FoldersScreenDestination
-import com.kaajjo.libresudoku.destinations.LearnScreenDestination
 import com.kaajjo.libresudoku.destinations.SettingsCategoriesScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.PreferenceRow
-import com.kaajjo.libresudoku.ui.settings.autoupdate.UpdateChannel
+import com.kaajjo.libresudoku.ui.more.settings.autoupdate.UpdateChannel
 import com.kaajjo.libresudoku.ui.theme.RoundedPolygonShape
 import com.kaajjo.libresudoku.util.FlavorUtil
 import com.materialkolor.ktx.blend
@@ -121,21 +118,6 @@ fun MoreScreen(
                 title = stringResource(R.string.settings_title),
                 painter = painterResource(R.drawable.ic_settings_24),
                 onClick = { navigator.navigate(SettingsCategoriesScreenDestination()) }
-            )
-            PreferenceRow(
-                title = stringResource(R.string.backup_restore_title),
-                painter = rememberVectorPainter(image = Icons.Rounded.SettingsBackupRestore),
-                onClick = { navigator.navigate(BackupScreenDestination()) }
-            )
-            PreferenceRow(
-                title = stringResource(R.string.title_folders),
-                painter = rememberVectorPainter(Icons.Outlined.Folder),
-                onClick = { navigator.navigate(FoldersScreenDestination()) }
-            )
-            PreferenceRow(
-                title = stringResource(R.string.learn_screen_title),
-                painter = painterResource(R.drawable.ic_outline_help_outline_24),
-                onClick = { navigator.navigate(LearnScreenDestination()) }
             )
             PreferenceRow(
                 title = stringResource(R.string.about_title),

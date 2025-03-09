@@ -1,4 +1,4 @@
-package com.kaajjo.libresudoku.ui.settings.boardtheme
+package com.kaajjo.libresudoku.ui.more.settings.boardtheme
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

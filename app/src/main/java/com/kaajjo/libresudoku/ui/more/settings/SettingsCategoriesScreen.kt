@@ -1,4 +1,4 @@
-package com.kaajjo.libresudoku.ui.settings
+package com.kaajjo.libresudoku.ui.more.settings
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -8,12 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Extension
 import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.TipsAndUpdates
-import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.SystemUpdate
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
@@ -38,19 +34,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.kaajjo.libresudoku.R
 import com.kaajjo.libresudoku.destinations.AutoUpdateScreenDestination
-import com.kaajjo.libresudoku.destinations.SettingsAdvancedHintScreenDestination
 import com.kaajjo.libresudoku.destinations.SettingsAppearanceScreenDestination
-import com.kaajjo.libresudoku.destinations.SettingsAssistanceScreenDestination
-import com.kaajjo.libresudoku.destinations.SettingsGameplayScreenDestination
 import com.kaajjo.libresudoku.destinations.SettingsLanguageScreenDestination
-import com.kaajjo.libresudoku.destinations.SettingsOtherScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.PreferenceRow
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.CollapsingTitle
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.CollapsingTopAppBar
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.rememberTopAppBarScrollBehavior
-import com.kaajjo.libresudoku.ui.settings.components.AppThemePreviewItem
+import com.kaajjo.libresudoku.ui.more.settings.components.AppThemePreviewItem
 import com.kaajjo.libresudoku.ui.util.getCurrentLocaleString
 import com.kaajjo.libresudoku.util.FlavorUtil
 import com.ramcosta.composedestinations.annotation.Destination
@@ -86,37 +78,6 @@ fun SettingsCategoriesScreen(
 
             item {
                 PreferenceRow(
-                    title = stringResource(R.string.pref_gameplay),
-                    subtitle = stringResource(R.string.perf_gameplay_summary),
-                    onClick = {
-                        navigator.navigate(SettingsGameplayScreenDestination())
-                    },
-                    painter = rememberVectorPainter(Icons.Outlined.Extension)
-                )
-            }
-
-            item {
-                PreferenceRow(
-                    title = stringResource(R.string.pref_assistance),
-                    subtitle = stringResource(R.string.perf_assistance_summary),
-                    onClick = {
-                        navigator.navigate(SettingsAssistanceScreenDestination())
-                    },
-                    painter = rememberVectorPainter(Icons.Outlined.TipsAndUpdates)
-                )
-            }
-
-            item {
-                PreferenceRow(
-                    title = stringResource(R.string.advanced_hint_title),
-                    subtitle = stringResource(R.string.advanced_hint_summary),
-                    onClick = { navigator.navigate(SettingsAdvancedHintScreenDestination()) },
-                    painter = rememberVectorPainter(Icons.Rounded.AutoAwesome)
-                )
-            }
-
-            item {
-                PreferenceRow(
                     title = stringResource(R.string.pref_app_language),
                     subtitle = currentLanguage,
                     onClick = {
@@ -136,16 +97,6 @@ fun SettingsCategoriesScreen(
                         painter = rememberVectorPainter(Icons.Rounded.SystemUpdate)
                     )
                 }
-            }
-            item {
-                PreferenceRow(
-                    title = stringResource(R.string.pref_other),
-                    subtitle = stringResource(R.string.perf_other_summary),
-                    onClick = {
-                        navigator.navigate(SettingsOtherScreenDestination(launchedFromGame = launchedFromGame))
-                    },
-                    painter = rememberVectorPainter(Icons.Outlined.MoreHoriz)
-                )
             }
         }
     }

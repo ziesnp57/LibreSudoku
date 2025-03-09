@@ -13,7 +13,7 @@ import com.kaajjo.libresudoku.core.PreferencesConstants
 import com.kaajjo.libresudoku.core.qqwing.GameDifficulty
 import com.kaajjo.libresudoku.core.qqwing.GameType
 import com.kaajjo.libresudoku.core.qqwing.advanced_hint.AdvancedHintSettings
-import com.kaajjo.libresudoku.ui.settings.autoupdate.UpdateChannel
+import com.kaajjo.libresudoku.ui.more.settings.autoupdate.UpdateChannel
 import kotlinx.coroutines.flow.map
 import java.time.Instant
 import java.time.ZoneId

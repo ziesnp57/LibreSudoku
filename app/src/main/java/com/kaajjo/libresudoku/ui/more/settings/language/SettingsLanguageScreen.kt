@@ -1,4 +1,4 @@
-package com.kaajjo.libresudoku.ui.settings.language
+package com.kaajjo.libresudoku.ui.more.settings.language
 
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
@@ -8,14 +8,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -31,19 +26,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import com.kaajjo.libresudoku.R
-import com.kaajjo.libresudoku.core.WEBLATE_ENGAGE
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
 import com.kaajjo.libresudoku.ui.components.locale_emoji.LocaleEmoji
-import com.kaajjo.libresudoku.ui.settings.SettingsScaffoldLazyColumn
+import com.kaajjo.libresudoku.ui.more.settings.SettingsScaffoldLazyColumn
 import com.kaajjo.libresudoku.ui.theme.ColorUtils.harmonizeWithPrimary
 import com.kaajjo.libresudoku.ui.util.findActivity
 import com.kaajjo.libresudoku.ui.util.getCurrentLocaleTag
@@ -57,8 +49,6 @@ fun SettingsLanguageScreen(
     navigator: DestinationsNavigator
 ) {
     val context = LocalContext.current
-    val uriHandler = LocalUriHandler.current
-
     val appLanguages by remember { mutableStateOf(getLangs(context)) }
     var currentLanguage by remember { mutableStateOf(getCurrentLocaleTag()) }
 
@@ -72,16 +62,6 @@ fun SettingsLanguageScreen(
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            item {
-                HelpTranslateCard(
-                    onClick = {
-                        uriHandler.openUri(WEBLATE_ENGAGE)
-                    }
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.height(12.dp))
-            }
             items(appLanguages.toList()) { (langCode, langName) ->
                 LanguageItem(
                     languageName = langName,
@@ -107,49 +87,6 @@ fun SettingsLanguageScreen(
     }
 }
 
-@Composable
-private fun HelpTranslateCard(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp)
-            .clip(MaterialTheme.shapes.extraLarge)
-            .background(MaterialTheme.colorScheme.secondaryContainer)
-            .clickable(onClick = onClick)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_weblate),
-                contentDescription = null
-            )
-            Column(
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .weight(1f)
-            ) {
-                Text(
-                    text = stringResource(R.string.help_translate),
-                    style = MaterialTheme.typography.titleLarge.copy(fontSize = 24.sp)
-                )
-                Text(
-                    text = stringResource(R.string.hosted_weblate)
-                )
-            }
-            Icon(
-                imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
-                contentDescription = null
-            )
-        }
-    }
-}
 
 @Composable
 private fun LanguageItem(

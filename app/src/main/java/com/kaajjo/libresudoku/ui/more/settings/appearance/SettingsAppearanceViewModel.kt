@@ -1,20 +1,17 @@
-package com.kaajjo.libresudoku.ui.settings.appearance
+package com.kaajjo.libresudoku.ui.more.settings.appearance
 
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kaajjo.libresudoku.data.datastore.AppSettingsManager
 import com.kaajjo.libresudoku.data.datastore.ThemeSettingsManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsAppearanceViewModel @Inject constructor(
-    private val themeSettings: ThemeSettingsManager,
-    private val settings: AppSettingsManager
+    private val themeSettings: ThemeSettingsManager
 ) : ViewModel() {
     val darkTheme by lazy {
         themeSettings.darkTheme
@@ -43,12 +40,7 @@ class SettingsAppearanceViewModel @Inject constructor(
             themeSettings.setAmoledBlack(enabled)
         }
 
-    val dateFormat = settings.dateFormat
-    fun updateDateFormat(format: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            settings.setDateFormat(format)
-        }
-    }
+
 
     val paletteStyle by lazy { themeSettings.themePaletteStyle }
     fun updatePaletteStyle(index: Int) =
@@ -70,12 +62,5 @@ class SettingsAppearanceViewModel @Inject constructor(
         }
     }
 
-    fun checkCustomDateFormat(pattern: String): Boolean {
-        return try {
-            DateTimeFormatter.ofPattern(pattern)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
+
 }

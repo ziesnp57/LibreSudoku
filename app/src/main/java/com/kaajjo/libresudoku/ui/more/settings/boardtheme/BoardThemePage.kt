@@ -1,4 +1,4 @@
-package com.kaajjo.libresudoku.ui.settings.boardtheme
+package com.kaajjo.libresudoku.ui.more.settings.boardtheme
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,7 +47,7 @@ import com.kaajjo.libresudoku.ui.components.board.Board
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.CollapsingTitle
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.CollapsingTopAppBar
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.rememberTopAppBarScrollBehavior
-import com.kaajjo.libresudoku.ui.settings.SelectionDialog
+import com.kaajjo.libresudoku.ui.more.settings.SelectionDialog
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 

@@ -1,4 +1,4 @@
-package com.kaajjo.libresudoku.ui.settings.components
+package com.kaajjo.libresudoku.ui.more.settings.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background

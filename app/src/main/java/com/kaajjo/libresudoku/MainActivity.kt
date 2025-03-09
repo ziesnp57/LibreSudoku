@@ -29,7 +29,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
 import com.kaajjo.libresudoku.core.PreferencesConstants
 import com.kaajjo.libresudoku.core.update.Release
 import com.kaajjo.libresudoku.core.update.UpdateUtil
@@ -37,13 +36,11 @@ import com.kaajjo.libresudoku.core.utils.GlobalExceptionHandler
 import com.kaajjo.libresudoku.data.datastore.AppSettingsManager
 import com.kaajjo.libresudoku.data.datastore.ThemeSettingsManager
 import com.kaajjo.libresudoku.destinations.HomeScreenDestination
-import com.kaajjo.libresudoku.destinations.ImportFromFileScreenDestination
 import com.kaajjo.libresudoku.destinations.MoreScreenDestination
 import com.kaajjo.libresudoku.destinations.StatisticsScreenDestination
-import com.kaajjo.libresudoku.destinations.WelcomeScreenDestination
 import com.kaajjo.libresudoku.ui.app_crash.CrashActivity
 import com.kaajjo.libresudoku.ui.components.navigation_bar.NavigationBarComponent
-import com.kaajjo.libresudoku.ui.settings.autoupdate.UpdateChannel
+import com.kaajjo.libresudoku.ui.more.settings.autoupdate.UpdateChannel
 import com.kaajjo.libresudoku.ui.theme.BoardColors
 import com.kaajjo.libresudoku.ui.theme.LibreSudokuTheme
 import com.kaajjo.libresudoku.ui.theme.SudokuBoardColorsImpl
@@ -108,16 +105,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 LaunchedEffect(firstLaunch) {
-                    if (firstLaunch) {
-                        navController.navigate(
-                            route = WelcomeScreenDestination.route,
-                            navOptions = navOptions {
-                                popUpTo(HomeScreenDestination.route) {
-                                    inclusive = true
-                                }
-                            }
-                        )
-                    }
+
                 }
 
                 val monetSudokuBoard by mainViewModel.monetSudokuBoard.collectAsStateWithLifecycle(
@@ -220,14 +208,7 @@ fun HandleImportFromFileDeepLink(
         val activity = context.findActivity()
         if (activity != null) {
             val intentData = activity.intent.data
-            if (intentData != null) {
-                navigator.navigate(
-                    ImportFromFileScreenDestination(
-                        fileUri = intentData.toString(),
-                        fromDeepLink = true
-                    )
-                )
-            }
+
         }
     }
 }

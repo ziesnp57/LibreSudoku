@@ -1,4 +1,4 @@
-package com.kaajjo.libresudoku.ui.settings.appearance
+package com.kaajjo.libresudoku.ui.more.settings.appearance
 
 import android.os.Build
 import android.widget.Toast
@@ -15,9 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Contrast
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.EditCalendar
 import androidx.compose.material.icons.outlined.Palette
-import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,35 +36,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaajjo.libresudoku.R
 import com.kaajjo.libresudoku.core.PreferencesConstants
-import com.kaajjo.libresudoku.data.datastore.AppSettingsManager
 import com.kaajjo.libresudoku.data.datastore.ThemeSettingsManager
-import com.kaajjo.libresudoku.destinations.SettingsBoardThemeDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.PreferenceRow
 import com.kaajjo.libresudoku.ui.components.PreferenceRowSwitch
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
-import com.kaajjo.libresudoku.ui.settings.AppThemeItem
-import com.kaajjo.libresudoku.ui.settings.DateFormatDialog
-import com.kaajjo.libresudoku.ui.settings.SelectionDialog
-import com.kaajjo.libresudoku.ui.settings.SetDateFormatPatternDialog
-import com.kaajjo.libresudoku.ui.settings.SettingsScaffoldLazyColumn
-import com.kaajjo.libresudoku.ui.settings.components.AppThemePreviewItem
-import com.kaajjo.libresudoku.ui.settings.components.ColorPickerDialog
+import com.kaajjo.libresudoku.ui.more.settings.AppThemeItem
+import com.kaajjo.libresudoku.ui.more.settings.SelectionDialog
+import com.kaajjo.libresudoku.ui.more.settings.SettingsScaffoldLazyColumn
+import com.kaajjo.libresudoku.ui.more.settings.components.AppThemePreviewItem
+import com.kaajjo.libresudoku.ui.more.settings.components.ColorPickerDialog
 import com.kaajjo.libresudoku.ui.theme.LibreSudokuTheme
 import com.materialkolor.PaletteStyle
 import com.materialkolor.rememberDynamicColorScheme
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import java.time.ZonedDateTime
-import java.time.chrono.IsoChronology
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.FormatStyle
-import java.util.Locale
 
 @Destination(style = AnimatedNavigation::class)
 @OptIn(ExperimentalStdlibApi::class)
@@ -78,14 +67,11 @@ fun SettingsAppearanceScreen(
     val context = LocalContext.current
 
     var darkModeDialog by rememberSaveable { mutableStateOf(false) }
-    var dateFormatDialog by rememberSaveable { mutableStateOf(false) }
-    var customFormatDialog by rememberSaveable { mutableStateOf(false) }
     var paletteStyleDialog by rememberSaveable { mutableStateOf(false) }
     var colorPickerDialog by rememberSaveable { mutableStateOf(false) }
 
     val darkTheme by viewModel.darkTheme.collectAsStateWithLifecycle(initialValue = PreferencesConstants.DEFAULT_DARK_THEME)
-    val dateFormat by viewModel.dateFormat.collectAsStateWithLifecycle(initialValue = "")
-    val dynamicColors by viewModel.dynamicColors.collectAsStateWithLifecycle(initialValue = PreferencesConstants.DEFAULT_DYNAMIC_COLORS)
+     val dynamicColors by viewModel.dynamicColors.collectAsStateWithLifecycle(initialValue = PreferencesConstants.DEFAULT_DYNAMIC_COLORS)
     val amoledBlack by viewModel.amoledBlack.collectAsStateWithLifecycle(initialValue = PreferencesConstants.DEFAULT_AMOLED_BLACK)
 
     val currentPaletteStyle by viewModel.paletteStyle.collectAsStateWithLifecycle(initialValue = PaletteStyle.TonalSpot)
@@ -262,26 +248,6 @@ fun SettingsAppearanceScreen(
                     painter = rememberVectorPainter(Icons.Outlined.Contrast)
                 )
             }
-            item {
-                PreferenceRow(
-                    title = stringResource(R.string.pref_board_theme_title),
-                    subtitle = stringResource(R.string.pref_board_theme_summary),
-                    onClick = {
-                        navigator.navigate(SettingsBoardThemeDestination())
-                    },
-                    painter = rememberVectorPainter(Icons.Outlined.Tag)
-                )
-            }
-            item {
-                PreferenceRow(
-                    title = stringResource(R.string.pref_date_format),
-                    subtitle = "${dateFormat.ifEmpty { stringResource(R.string.label_default) }} (${
-                        ZonedDateTime.now().format(AppSettingsManager.dateFormat(dateFormat))
-                    })",
-                    onClick = { dateFormatDialog = true },
-                    painter = rememberVectorPainter(Icons.Outlined.EditCalendar)
-                )
-            }
         }
     }
 
@@ -299,48 +265,6 @@ fun SettingsAppearanceScreen(
             },
             onDismiss = { darkModeDialog = false }
         )
-    } else if (dateFormatDialog) {
-        DateFormatDialog(
-            title = stringResource(R.string.pref_date_format),
-            entries = DateFormats.associateWith { dateFormatEntry ->
-                val dateString = ZonedDateTime.now().format(
-                    when (dateFormatEntry) {
-                        "" -> {
-                            DateTimeFormatter.ofPattern(
-                                DateTimeFormatterBuilder.getLocalizedDateTimePattern(
-                                    FormatStyle.SHORT,
-                                    null,
-                                    IsoChronology.INSTANCE,
-                                    Locale.getDefault()
-                                )
-                            )
-                        }
-
-                        else -> {
-                            DateTimeFormatter.ofPattern(dateFormatEntry)
-                        }
-                    }
-                )
-                "${dateFormatEntry.ifEmpty { stringResource(R.string.label_default) }} ($dateString)"
-            },
-            customDateFormatText =
-            if (!DateFormats.contains(dateFormat))
-                "$dateFormat (${
-                    ZonedDateTime.now().format(DateTimeFormatter.ofPattern(dateFormat))
-                })"
-            else stringResource(R.string.pref_date_format_custom_label),
-            selected = dateFormat,
-            onSelect = { format ->
-                if (format == "custom") {
-                    customFormatDialog = true
-                } else {
-                    viewModel.updateDateFormat(format)
-                }
-                dateFormatDialog = false
-            },
-            onDismiss = { dateFormatDialog = false },
-
-            )
     } else if (paletteStyleDialog) {
         SelectionDialog(
             title = stringResource(R.string.pref_monet_style),
@@ -396,9 +320,7 @@ fun SettingsAppearanceScreen(
                 var parsedColor: Int? = null
                 if (clipboardContent != null) {
                     try {
-                        parsedColor = android.graphics.Color.parseColor(
-                            clipboardContent.text
-                        )
+                        parsedColor = clipboardContent.text.toColorInt()
                     } catch (_: Exception) {
 
                     }
@@ -418,53 +340,4 @@ fun SettingsAppearanceScreen(
         )
     }
 
-    if (customFormatDialog) {
-        var customDateFormat by rememberSaveable {
-            mutableStateOf(
-                if (DateFormats.contains(
-                        dateFormat
-                    )
-                ) "" else dateFormat
-            )
-        }
-        var invalidCustomDateFormat by rememberSaveable { mutableStateOf(false) }
-        var dateFormatPreview by rememberSaveable { mutableStateOf("") }
-
-        SetDateFormatPatternDialog(
-            onConfirm = {
-                if (viewModel.checkCustomDateFormat(customDateFormat)) {
-                    viewModel.updateDateFormat(customDateFormat)
-                    invalidCustomDateFormat = false
-                    customFormatDialog = false
-                } else {
-                    invalidCustomDateFormat = true
-                }
-            },
-            onDismissRequest = { customFormatDialog = false },
-            onTextValueChange = { text ->
-                customDateFormat = text
-                if (invalidCustomDateFormat) invalidCustomDateFormat = false
-
-                dateFormatPreview = if (viewModel.checkCustomDateFormat(customDateFormat)) {
-                    ZonedDateTime.now()
-                        .format(DateTimeFormatter.ofPattern(customDateFormat))
-                } else {
-                    ""
-                }
-            },
-            customDateFormat = customDateFormat,
-            invalidCustomDateFormat = invalidCustomDateFormat,
-            datePreview = dateFormatPreview
-        )
-    }
 }
-
-private val DateFormats = listOf(
-    "",
-    "dd/MM/yy",
-    "dd.MM.yy",
-    "MM/dd/yy",
-    "yyyy-MM-dd",
-    "dd MMM yyyy",
-    "MMM dd, yyyy"
-)

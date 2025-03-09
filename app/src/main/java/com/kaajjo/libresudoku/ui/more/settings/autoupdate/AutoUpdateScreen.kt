@@ -1,4 +1,4 @@
-package com.kaajjo.libresudoku.ui.settings.autoupdate
+package com.kaajjo.libresudoku.ui.more.settings.autoupdate
 
 import android.Manifest
 import android.content.Intent

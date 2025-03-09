@@ -108,7 +108,6 @@ import com.kaajjo.libresudoku.data.database.model.SavedGame
 import com.kaajjo.libresudoku.data.database.model.SudokuBoard
 import com.kaajjo.libresudoku.destinations.CreateSudokuScreenDestination
 import com.kaajjo.libresudoku.destinations.GameScreenDestination
-import com.kaajjo.libresudoku.destinations.ImportFromFileScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.EmptyScreen
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
@@ -162,12 +161,7 @@ fun ExploreFolderScreen(
     LaunchedEffect(contentUri) {
         contentUri?.let { uri ->
             folder?.let { folder ->
-                navigator.navigate(
-                    ImportFromFileScreenDestination(
-                        fileUri = uri.toString(),
-                        folderUid = folder.uid
-                    )
-                )
+
             }
         }
     }
