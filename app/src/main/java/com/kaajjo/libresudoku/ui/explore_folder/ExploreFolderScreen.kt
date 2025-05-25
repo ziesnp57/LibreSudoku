@@ -114,7 +114,6 @@ import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
 import com.kaajjo.libresudoku.ui.components.board.BoardPreview
 import com.kaajjo.libresudoku.ui.create_edit_sudoku.DifficultyMenu
 import com.kaajjo.libresudoku.ui.create_edit_sudoku.GameTypeMenu
-import com.kaajjo.libresudoku.ui.gameshistory.ColorfulBadge
 import com.kaajjo.libresudoku.ui.util.isScrolledToEnd
 import com.kaajjo.libresudoku.ui.util.isScrolledToStart
 import com.kaajjo.libresudoku.ui.util.isScrollingUp
@@ -621,9 +620,7 @@ fun GameInFolderWidget(
 
                         if (savedGame != null && savedGame.canContinue) {
                             Spacer(modifier = Modifier.height(12.dp))
-                            ColorfulBadge(
-                                text = stringResource(R.string.can_continue_label)
-                            )
+
                         }
                     }
                 }

@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kaajjo.libresudoku.R
-import com.kaajjo.libresudoku.destinations.GamesHistoryScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -44,7 +43,7 @@ fun StatisticsScreen(
                 title = { Text(stringResource(R.string.statistics)) },
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    IconButton(onClick = { navigator.navigate(GamesHistoryScreenDestination()) }) {
+                    IconButton(onClick = {  }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_round_history_24),
                             contentDescription = null
