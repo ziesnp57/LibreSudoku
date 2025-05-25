@@ -116,7 +116,7 @@ fun HomeScreen(
 
                 runBlocking {
                     //viewModel.saveToDatabase()
-                    val saved = lastGame?.completed ?: false
+                    val saved = lastGame?.completed == true
                     navigator.navigate(
                         GameScreenDestination(
                             gameUid = viewModel.insertedBoardUid,

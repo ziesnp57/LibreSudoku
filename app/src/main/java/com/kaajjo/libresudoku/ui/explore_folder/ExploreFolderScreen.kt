@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,7 +46,6 @@ import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Folder
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.AddCircleOutline
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -109,12 +107,10 @@ import com.kaajjo.libresudoku.data.database.model.SudokuBoard
 import com.kaajjo.libresudoku.destinations.CreateSudokuScreenDestination
 import com.kaajjo.libresudoku.destinations.GameScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
-import com.kaajjo.libresudoku.ui.components.EmptyScreen
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
 import com.kaajjo.libresudoku.ui.components.board.BoardPreview
 import com.kaajjo.libresudoku.ui.create_edit_sudoku.DifficultyMenu
 import com.kaajjo.libresudoku.ui.create_edit_sudoku.GameTypeMenu
-import com.kaajjo.libresudoku.ui.gameshistory.ColorfulBadge
 import com.kaajjo.libresudoku.ui.util.isScrolledToEnd
 import com.kaajjo.libresudoku.ui.util.isScrolledToStart
 import com.kaajjo.libresudoku.ui.util.isScrollingUp
@@ -273,19 +269,6 @@ fun ExploreFolderScreen(
                         )
                     }
                 }
-            } else if (folder != null) {
-                EmptyScreen(
-                    text = stringResource(R.string.folder_empty_label),
-                    content = {
-                        Button(onClick = {
-                            addSudokuBottomSheet = true
-                        }) {
-                            Icon(Icons.Rounded.Add, contentDescription = null)
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(stringResource(R.string.add_to_folder))
-                        }
-                    }
-                )
             }
         }
     }
@@ -621,9 +604,7 @@ fun GameInFolderWidget(
 
                         if (savedGame != null && savedGame.canContinue) {
                             Spacer(modifier = Modifier.height(12.dp))
-                            ColorfulBadge(
-                                text = stringResource(R.string.can_continue_label)
-                            )
+
                         }
                     }
                 }
@@ -645,7 +626,7 @@ fun GameInFolderWidget(
                             else
                                 stringResource(R.string.action_continue),
                             onClick = onPlayClick,
-                            enabled = savedGame?.canContinue ?: true
+                            enabled = savedGame?.canContinue != false
                         )
                         IconWithText(
                             imageVector = if (savedGame == null) Icons.Rounded.Edit else Icons.Rounded.EditOff,
