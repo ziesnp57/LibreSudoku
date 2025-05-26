@@ -43,7 +43,6 @@ import com.kaajjo.libresudoku.core.utils.SudokuUtils
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.PreferenceRow
 import com.kaajjo.libresudoku.ui.components.PreferenceRowSwitch
-import com.kaajjo.libresudoku.ui.components.board.Board
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.CollapsingTitle
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.CollapsingTopAppBar
 import com.kaajjo.libresudoku.ui.components.collapsing_topappbar.rememberTopAppBarScrollBehavior
@@ -221,17 +220,5 @@ private fun BoardPreviewTheme(
         },
         gameType = gameType
     )
-    var selectedCell by remember(gameType) { mutableStateOf(Cell(-1, -1, 0)) }
-    Board(
-        modifier = modifier,
-        board = previewBoard,
-        size = gameType.size,
-        selectedCell = selectedCell,
-        onClick = { cell -> selectedCell = if (selectedCell == cell) Cell(-1, -1, 0) else cell },
-        positionLines = positionLines,
-        errorsHighlight = errorsHighlight,
-        crossHighlight = crossHighlight,
-        mainTextSize = fontSize,
-        autoFontSize = autoFontSize
-    )
+
 }

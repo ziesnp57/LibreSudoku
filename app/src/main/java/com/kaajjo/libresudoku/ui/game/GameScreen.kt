@@ -1,6 +1,5 @@
 package com.kaajjo.libresudoku.ui.game
 
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -45,9 +44,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -67,13 +64,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaajjo.libresudoku.R
 import com.kaajjo.libresudoku.core.Cell
 import com.kaajjo.libresudoku.core.PreferencesConstants
-import com.kaajjo.libresudoku.core.qqwing.GameType
 import com.kaajjo.libresudoku.core.qqwing.advanced_hint.AdvancedHintData
 import com.kaajjo.libresudoku.core.utils.SudokuParser
 import com.kaajjo.libresudoku.destinations.SettingsCategoriesScreenDestination
 import com.kaajjo.libresudoku.ui.components.AdvancedHintContainer
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
-import com.kaajjo.libresudoku.ui.components.board.Board
 import com.kaajjo.libresudoku.ui.game.components.DefaultGameKeyboard
 import com.kaajjo.libresudoku.ui.game.components.GameMenu
 import com.kaajjo.libresudoku.ui.game.components.NotesMenu
@@ -325,47 +320,6 @@ fun GameScreen(
                         )
                     }
                 }
-                Board(
-                    modifier = Modifier
-                        .blur(boardBlur)
-                        .scale(boardScale, boardScale),
-                    board = if (!viewModel.showSolution) viewModel.gameBoard else viewModel.solvedBoard,
-                    size = viewModel.size,
-                    mainTextSize = fontSizeValue,
-                    autoFontSize = fontSizeFactor == 0,
-                    notes = viewModel.notes,
-                    selectedCell = viewModel.currCell,
-                    onClick = { cell ->
-                        viewModel.processInput(
-                            cell = cell,
-                            remainingUse = remainingUse,
-                        )
-                        if (!viewModel.gamePlaying) {
-                            localView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                            viewModel.startTimer()
-                        }
-                    },
-                    onLongClick = { cell ->
-                        if (viewModel.processInput(cell, remainingUse, longTap = true)) {
-                            localView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
-                        }
-                    },
-                    identicalNumbersHighlight = highlightIdentical,
-                    errorsHighlight = errorHighlight != 0,
-                    positionLines = positionLines,
-                    notesToHighlight = if (viewModel.digitFirstNumber > 0) {
-                        viewModel.notes.filter { it.value == viewModel.digitFirstNumber }
-                    } else {
-                        emptyList()
-                    },
-                    enabled = viewModel.gamePlaying && !viewModel.endGame,
-                    questions = !(viewModel.gamePlaying || viewModel.endGame) && SDK_INT < Build.VERSION_CODES.R,
-                    renderNotes = renderNotes && !viewModel.showSolution,
-                    zoomable = viewModel.gameType == GameType.Default12x12 || viewModel.gameType == GameType.Killer12x12,
-                    crossHighlight = crossHighlight,
-                    cages = viewModel.cages,
-                    cellsToHighlight = if (advancedHintMode && advancedHintData != null) advancedHintData!!.helpCells + advancedHintData!!.targetCell else null
-                )
             }
 
             AnimatedContent(advancedHintMode) { targetState ->

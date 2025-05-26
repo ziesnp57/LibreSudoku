@@ -49,7 +49,6 @@ import com.kaajjo.libresudoku.core.PreferencesConstants
 import com.kaajjo.libresudoku.core.qqwing.GameDifficulty
 import com.kaajjo.libresudoku.core.qqwing.GameType
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
-import com.kaajjo.libresudoku.ui.components.board.Board
 import com.kaajjo.libresudoku.ui.game.components.DefaultGameKeyboard
 import com.kaajjo.libresudoku.ui.game.components.ToolBarItem
 import com.kaajjo.libresudoku.ui.game.components.ToolbarItem
@@ -191,20 +190,6 @@ fun CreateSudokuScreen(
 
             val positionLines by viewModel.positionLines.collectAsState(initial = PreferencesConstants.DEFAULT_POSITION_LINES)
             val crossHighlight by viewModel.crossHighlight.collectAsState(initial = PreferencesConstants.DEFAULT_BOARD_CROSS_HIGHLIGHT)
-            Board(
-                modifier = Modifier.padding(vertical = 12.dp),
-                size = viewModel.gameType.size,
-                mainTextSize = fontSizeValue,
-                autoFontSize = fontSizeFactor == 0,
-                board = viewModel.gameBoard,
-                selectedCell = viewModel.currCell,
-                onClick = { cell ->
-                    viewModel.processInput(cell = cell)
-                },
-                identicalNumbersHighlight = highlightIdentical,
-                positionLines = positionLines,
-                crossHighlight = crossHighlight
-            )
 
             val funKeyboardOverNum by viewModel.funKeyboardOverNum.collectAsStateWithLifecycle(
                 initialValue = PreferencesConstants.DEFAULT_FUN_KEYBOARD_OVER_NUM
