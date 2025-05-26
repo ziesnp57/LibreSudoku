@@ -104,12 +104,9 @@ import com.kaajjo.libresudoku.core.utils.toFormattedString
 import com.kaajjo.libresudoku.data.database.model.Folder
 import com.kaajjo.libresudoku.data.database.model.SavedGame
 import com.kaajjo.libresudoku.data.database.model.SudokuBoard
-import com.kaajjo.libresudoku.destinations.CreateSudokuScreenDestination
 import com.kaajjo.libresudoku.destinations.GameScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
-import com.kaajjo.libresudoku.ui.create_edit_sudoku.DifficultyMenu
-import com.kaajjo.libresudoku.ui.create_edit_sudoku.GameTypeMenu
 import com.kaajjo.libresudoku.ui.util.isScrolledToEnd
 import com.kaajjo.libresudoku.ui.util.isScrolledToStart
 import com.kaajjo.libresudoku.ui.util.isScrollingUp
@@ -254,12 +251,7 @@ fun ExploreFolderScreen(
                             },
                             onPlayClick = { viewModel.prepareSudokuToPlay(game.first) },
                             onEditClick = {
-                                navigator.navigate(
-                                    CreateSudokuScreenDestination(
-                                        gameUid = game.first.uid,
-                                        folderUid = folder!!.uid
-                                    )
-                                )
+
                             },
                             onDeleteClick = {
                                 deleteBoardDialogBoard = game.first
@@ -383,17 +375,7 @@ fun ExploreFolderScreen(
                                             contentDescription = null
                                         )
                                     }
-                                    DifficultyMenu(
-                                        expanded = difficultyMenu,
-                                        onDismissRequest = { difficultyMenu = false },
-                                        difficulties = listOf(
-                                            GameDifficulty.Easy,
-                                            GameDifficulty.Moderate,
-                                            GameDifficulty.Hard,
-                                            GameDifficulty.Challenge
-                                        ),
-                                        onClick = { selectedDifficulty = it }
-                                    )
+
                                 }
                                 Box {
                                     var gameTypeMenuExpanded by remember { mutableStateOf(false) }
@@ -409,11 +391,7 @@ fun ExploreFolderScreen(
                                             contentDescription = null
                                         )
                                     }
-                                    GameTypeMenu(
-                                        expanded = gameTypeMenuExpanded,
-                                        onDismissRequest = { gameTypeMenuExpanded = false },
-                                        onClick = { selectedType = it }
-                                    )
+
                                 }
                             }
                             Text(
@@ -492,11 +470,7 @@ fun ExploreFolderScreen(
 
                                         1 -> {
                                             folder?.let {
-                                                navigator.navigate(
-                                                    CreateSudokuScreenDestination(
-                                                        folderUid = it.uid
-                                                    )
-                                                )
+
                                             }
                                         }
 
