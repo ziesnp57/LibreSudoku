@@ -108,7 +108,6 @@ import com.kaajjo.libresudoku.destinations.CreateSudokuScreenDestination
 import com.kaajjo.libresudoku.destinations.GameScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
-import com.kaajjo.libresudoku.ui.components.board.BoardPreview
 import com.kaajjo.libresudoku.ui.create_edit_sudoku.DifficultyMenu
 import com.kaajjo.libresudoku.ui.create_edit_sudoku.GameTypeMenu
 import com.kaajjo.libresudoku.ui.util.isScrolledToEnd
@@ -576,10 +575,7 @@ fun GameInFolderWidget(
                             .clip(RoundedCornerShape(4.dp))
                             .size(130.dp)
                     ) {
-                        BoardPreview(
-                            size = sqrt(board.length.toFloat()).toInt(),
-                            boardString = board,
-                        )
+
                     }
                     Column(
                         modifier = Modifier

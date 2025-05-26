@@ -61,7 +61,6 @@ import com.kaajjo.libresudoku.data.database.model.SavedGame
 import com.kaajjo.libresudoku.destinations.GameScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
-import com.kaajjo.libresudoku.ui.components.board.BoardPreview
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -353,10 +352,7 @@ fun SavedSudokuPreview(
                         .size(130.dp)
                         .align(Alignment.CenterVertically)
                 ) {
-                    BoardPreview(
-                        size = sqrt(board.length.toFloat()).toInt(),
-                        boardString = board
-                    )
+
                 }
                 Column(
                     modifier = Modifier
