@@ -58,7 +58,6 @@ import com.kaajjo.libresudoku.core.qqwing.GameDifficulty
 import com.kaajjo.libresudoku.core.qqwing.GameType
 import com.kaajjo.libresudoku.core.utils.toFormattedString
 import com.kaajjo.libresudoku.data.database.model.SavedGame
-import com.kaajjo.libresudoku.destinations.GameScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
 import com.ramcosta.composedestinations.annotation.Destination
@@ -116,12 +115,7 @@ fun HomeScreen(
                 runBlocking {
                     //viewModel.saveToDatabase()
                     val saved = lastGame?.completed == true
-                    navigator.navigate(
-                        GameScreenDestination(
-                            gameUid = viewModel.insertedBoardUid,
-                            playedBefore = saved
-                        )
-                    )
+
                 }
             }
 
@@ -149,12 +143,7 @@ fun HomeScreen(
                     Button(onClick = {
                         if (lastGames.size <= 1) {
                             lastGame?.let {
-                                navigator.navigate(
-                                    GameScreenDestination(
-                                        gameUid = it.uid,
-                                        playedBefore = true
-                                    )
-                                )
+
                             }
                         } else {
                             lastGamesBottomSheet = true
@@ -238,12 +227,7 @@ fun HomeScreen(
                             type = stringResource(item.second.type.resName),
                             savedGame = item.first,
                             onClick = {
-                                navigator.navigate(
-                                    GameScreenDestination(
-                                        gameUid = item.first.uid,
-                                        playedBefore = true
-                                    )
-                                )
+
                                 lastGamesBottomSheet = false
                             }
                         )
