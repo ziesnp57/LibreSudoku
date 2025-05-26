@@ -2,27 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "f0a74afcb17b9a4b4078f0765a30360d",
+    "identityHash": "7755b4a571347e5218bc991c3905331a",
     "entities": [
       {
         "tableName": "record",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`board_uid` INTEGER NOT NULL, `type` INTEGER NOT NULL, `difficulty` INTEGER NOT NULL, `date` INTEGER NOT NULL, `time` INTEGER NOT NULL, PRIMARY KEY(`board_uid`), FOREIGN KEY(`board_uid`) REFERENCES `board`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`board_uid` INTEGER NOT NULL, `date` INTEGER NOT NULL, `time` INTEGER NOT NULL, PRIMARY KEY(`board_uid`), FOREIGN KEY(`board_uid`) REFERENCES `board`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "board_uid",
             "columnName": "board_uid",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "difficulty",
-            "columnName": "difficulty",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -62,7 +50,7 @@
       },
       {
         "tableName": "board",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `initial_board` TEXT NOT NULL, `solved_board` TEXT NOT NULL, `difficulty` INTEGER NOT NULL, `type` INTEGER NOT NULL, `folder_id` INTEGER DEFAULT null, `killer_cages` TEXT DEFAULT null, FOREIGN KEY(`folder_id`) REFERENCES `Folder`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `initial_board` TEXT NOT NULL, `solved_board` TEXT NOT NULL, `folder_id` INTEGER DEFAULT null, `killer_cages` TEXT DEFAULT null, FOREIGN KEY(`folder_id`) REFERENCES `Folder`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "uid",
@@ -80,18 +68,6 @@
             "fieldPath": "solvedBoard",
             "columnName": "solved_board",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "difficulty",
-            "columnName": "difficulty",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -261,7 +237,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f0a74afcb17b9a4b4078f0765a30360d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7755b4a571347e5218bc991c3905331a')"
     ]
   }
 }

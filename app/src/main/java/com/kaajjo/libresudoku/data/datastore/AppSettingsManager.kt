@@ -10,13 +10,8 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.kaajjo.libresudoku.core.PreferencesConstants
-import com.kaajjo.libresudoku.core.qqwing.GameDifficulty
-import com.kaajjo.libresudoku.core.qqwing.GameType
-import com.kaajjo.libresudoku.core.qqwing.advanced_hint.AdvancedHintSettings
 import com.kaajjo.libresudoku.ui.more.settings.autoupdate.UpdateChannel
 import kotlinx.coroutines.flow.map
-import java.time.Instant
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.chrono.IsoChronology
 import java.time.format.DateTimeFormatter
@@ -282,66 +277,10 @@ class AppSettingsManager(context: Context) {
             ?: PreferencesConstants.DEFAULT_SAVE_LAST_SELECTED_DIFF_TYPE
     }
 
-    suspend fun setLastSelectedGameDifficultyType(
-        difficulty: GameDifficulty,
-        type: GameType
-    ) {
-        dataStore.edit { settings ->
-            var difficultyAndType = when (difficulty) {
-                GameDifficulty.Unspecified -> "0"
-                GameDifficulty.Simple -> "1"
-                GameDifficulty.Easy -> "2"
-                GameDifficulty.Moderate -> "3"
-                GameDifficulty.Hard -> "4"
-                GameDifficulty.Challenge -> "5"
-                GameDifficulty.Custom -> "6"
-            }
-            difficultyAndType += ";"
-            difficultyAndType += when (type) {
-                GameType.Unspecified -> "0"
-                GameType.Default9x9 -> "1"
-                GameType.Default12x12 -> "2"
-                GameType.Default6x6 -> "3"
-                GameType.Killer9x9 -> "4"
-                GameType.Killer12x12 -> "5"
-                GameType.Killer6x6 -> "6"
-            }
-            settings[lastSelectedGameDifficultyTypeKey] = difficultyAndType
-        }
-    }
 
     /**
      * Last selected difficulty and type. Returns Pair<GameDifficulty, GameType>
      */
-    val lastSelectedGameDifficultyType = dataStore.data.map { prefs ->
-        var gameDifficulty = GameDifficulty.Easy
-        var gameType = GameType.Default9x9
-
-        val key = prefs[lastSelectedGameDifficultyTypeKey] ?: ""
-        if (key.isNotEmpty() && key.contains(";")) {
-            gameDifficulty = when (key.substring(0, key.indexOf(";"))) {
-                "0" -> GameDifficulty.Unspecified
-                "1" -> GameDifficulty.Simple
-                "2" -> GameDifficulty.Easy
-                "3" -> GameDifficulty.Moderate
-                "4" -> GameDifficulty.Hard
-                "5" -> GameDifficulty.Challenge
-                "6" -> GameDifficulty.Custom
-                else -> GameDifficulty.Easy
-            }
-            gameType = when (key.substring(key.indexOf(";") + 1)) {
-                "0" -> GameType.Unspecified
-                "1" -> GameType.Default9x9
-                "2" -> GameType.Default12x12
-                "3" -> GameType.Default6x6
-                "4" -> GameType.Killer9x9
-                "5" -> GameType.Killer12x12
-                "6" -> GameType.Killer6x6
-                else -> GameType.Default9x9
-            }
-        }
-        Pair(gameDifficulty, gameType)
-    }
 
     suspend fun setBackupUri(uri: String) {
         dataStore.edit { settings ->
@@ -377,21 +316,6 @@ class AppSettingsManager(context: Context) {
         }
     }
 
-    val lastBackupDate = dataStore.data.map { prefs ->
-        val date = prefs[lastBackupDateKey]
-        if (date != null) {
-            ZonedDateTime.ofInstant(
-                Instant.ofEpochSecond(date),
-                ZoneId.systemDefault()
-            )
-        } else {
-            null
-        }
-
-
-
-    }
-
     val advancedHintEnabled = dataStore.data.map { settings ->
         settings[advancedHintKey] ?: PreferencesConstants.DEFAULT_ADVANCED_HINT
     }
@@ -402,28 +326,6 @@ class AppSettingsManager(context: Context) {
         }
     }
 
-    val advancedHintSettings = dataStore.data.map { settings ->
-        val fullHouse = settings[ahFullHouseKey] ?: true
-        val nakedSingle = settings[ahNakedSingle] ?: true
-        val hiddenSingle = settings[ahHiddenSingle] ?: true
-        val checkWrongValue = settings[ahCheckWrongValue] ?: true
-
-        AdvancedHintSettings(
-            fullHouse = fullHouse,
-            nakedSingle = nakedSingle,
-            hiddenSingle = hiddenSingle,
-            checkWrongValue = checkWrongValue
-        )
-    }
-
-    suspend fun updateAdvancedHintSettings(ahSettings: AdvancedHintSettings) {
-        dataStore.edit { settings ->
-            settings[ahFullHouseKey] = ahSettings.fullHouse
-            settings[ahNakedSingle] = ahSettings.nakedSingle
-            settings[ahHiddenSingle] = ahSettings.hiddenSingle
-            settings[ahCheckWrongValue] = ahSettings.checkWrongValue
-        }
-    }
 
     val autoUpdateChannel = dataStore.data.map { settings ->
         val channel = settings[autoUpdateChannelKey] ?: PreferencesConstants.DEFAULT_AUTOUPDATE_CHANNEL

@@ -14,14 +14,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,16 +26,11 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaajjo.libresudoku.R
-import com.kaajjo.libresudoku.core.Cell
 import com.kaajjo.libresudoku.core.PreferencesConstants
-import com.kaajjo.libresudoku.core.qqwing.GameType
-import com.kaajjo.libresudoku.core.utils.SudokuParser
-import com.kaajjo.libresudoku.core.utils.SudokuUtils
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.PreferenceRow
 import com.kaajjo.libresudoku.ui.components.PreferenceRowSwitch
@@ -67,20 +58,6 @@ fun SettingsBoardTheme(
         mutableStateOf(false)
     }
 
-    val gameTypes = listOf(
-        GameType.Default6x6,
-        GameType.Default9x9,
-        GameType.Default12x12,
-    )
-    var selectedBoardType by remember {
-        mutableStateOf(GameType.Default9x9)
-    }
-
-    val fontSizeValue by remember(fontSizeFactor, selectedBoardType) {
-        mutableStateOf(
-            SudokuUtils().getFontSize(selectedBoardType, fontSizeFactor)
-        )
-    }
     
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -110,30 +87,9 @@ fun SettingsBoardTheme(
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 8.dp)
             ) {
-                gameTypes.forEachIndexed { index, item ->
-                    SegmentedButton(
-                        selected = selectedBoardType == item,
-                        onClick = {
-                            selectedBoardType = item
-                        },
-                        shape = SegmentedButtonDefaults.itemShape(
-                            index = index,
-                            count = gameTypes.size
-                        )
-                    ) {
-                        Text(stringResource(id = item.resName))
-                    }
-                }
+
             }
-            BoardPreviewTheme(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
-                positionLines = positionLines,
-                errorsHighlight = highlightMistakes != 0,
-                crossHighlight = boardCrossHighlight,
-                fontSize = fontSizeValue,
-                autoFontSize = fontSizeFactor == 0,
-                gameType = selectedBoardType
-            )
+
             val monetSudokuBoard by viewModel.monetSudokuBoard.collectAsStateWithLifecycle(
                 PreferencesConstants.DEFAULT_MONET_SUDOKU_BOARD
             )
@@ -193,32 +149,4 @@ fun SettingsBoardTheme(
             )
         }
     }
-}
-
-@Composable
-private fun BoardPreviewTheme(
-    positionLines: Boolean,
-    errorsHighlight: Boolean,
-    crossHighlight: Boolean,
-    fontSize: TextUnit,
-    gameType: GameType,
-    modifier: Modifier = Modifier,
-    autoFontSize: Boolean = false
-) {
-    val previewBoard = SudokuParser().parseBoard(
-        board = when (gameType) {
-            GameType.Default6x6 -> {
-                "200005003600320041140063002300600002"
-            }
-            GameType.Default9x9 -> {
-                "025000860360208017700010003600000002040000090030000070006000100000507000490030058"
-            }
-            GameType.Default12x12 -> {
-                "09030000010a00501a0067b910700000050000920000000006407000000250000160300b0000205000000017000003088300b000a006003804090b659000ab007004002400000000"
-            }
-            else -> ""
-        },
-        gameType = gameType
-    )
-
 }

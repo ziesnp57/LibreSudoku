@@ -54,11 +54,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kaajjo.libresudoku.R
-import com.kaajjo.libresudoku.core.qqwing.GameDifficulty
-import com.kaajjo.libresudoku.core.qqwing.GameType
 import com.kaajjo.libresudoku.core.utils.toFormattedString
-import com.kaajjo.libresudoku.data.database.model.SavedGame
-import com.kaajjo.libresudoku.destinations.GameScreenDestination
 import com.kaajjo.libresudoku.ui.components.AnimatedNavigation
 import com.kaajjo.libresudoku.ui.components.ScrollbarLazyColumn
 import com.ramcosta.composedestinations.annotation.Destination
@@ -77,30 +73,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
-    var continueGameDialog by rememberSaveable { mutableStateOf(false) }
-    var lastGamesBottomSheet by rememberSaveable {
-        mutableStateOf(false)
-    }
 
-    val lastGame by viewModel.lastSavedGame.collectAsStateWithLifecycle()
-    val lastGames by viewModel.lastGames.collectAsStateWithLifecycle(initialValue = emptyMap())
-    val saveSelectedGameDifficultyType by viewModel.saveSelectedGameDifficultyType.collectAsStateWithLifecycle(
-        false
-    )
-    val lastSelectedGameDifficultyType by viewModel.lastSelectedGameDifficultyType.collectAsStateWithLifecycle(
-        Pair(
-            GameDifficulty.Easy, GameType.Default9x9
-        )
-    )
-
-
-    LaunchedEffect(saveSelectedGameDifficultyType) {
-        if (saveSelectedGameDifficultyType) {
-            val (difficulty, type) = lastSelectedGameDifficultyType
-            viewModel.selectedDifficulty = difficulty
-            viewModel.selectedType = type
-        }
-    }
 
     Scaffold { paddingValues ->
         Column(
@@ -110,20 +83,7 @@ fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            if (viewModel.readyToPlay) {
-                viewModel.readyToPlay = false
 
-                runBlocking {
-                    //viewModel.saveToDatabase()
-                    val saved = lastGame?.completed == true
-                    navigator.navigate(
-                        GameScreenDestination(
-                            gameUid = viewModel.insertedBoardUid,
-                            playedBefore = saved
-                        )
-                    )
-                }
-            }
 
             Text(
                 text = stringResource(R.string.app_name),
@@ -132,125 +92,16 @@ fun HomeScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                HorizontalPicker(
-                    text = stringResource(viewModel.selectedDifficulty.resName),
-                    onLeftClick = { viewModel.changeDifficulty(-1) },
-                    onRightClick = { viewModel.changeDifficulty(1) }
-                )
-                HorizontalPicker(
-                    text = stringResource(viewModel.selectedType.resName),
-                    onLeftClick = { viewModel.changeType(-1) },
-                    onRightClick = { viewModel.changeType(1) }
-                )
+
+
 
                 Spacer(Modifier.height(12.dp))
 
-                if (lastGame != null && !lastGame!!.completed) {
-                    Button(onClick = {
-                        if (lastGames.size <= 1) {
-                            lastGame?.let {
-                                navigator.navigate(
-                                    GameScreenDestination(
-                                        gameUid = it.uid,
-                                        playedBefore = true
-                                    )
-                                )
-                            }
-                        } else {
-                            lastGamesBottomSheet = true
-                        }
-                    }) {
-                        Text(stringResource(R.string.action_continue))
-                    }
-                    FilledTonalButton(onClick = {
-                        continueGameDialog = true
-                    }) {
-                        Text(stringResource(R.string.action_play))
-                    }
-                } else {
-                    Button(onClick = {
-                        viewModel.giveUpLastGame()
-                        viewModel.startGame()
-                    }) {
-                        Text(stringResource(R.string.action_play))
-                    }
-                }
             }
         }
 
 
-        if (viewModel.isGenerating || viewModel.isSolving) {
-            GeneratingDialog(
-                onDismiss = { },
-                text = when {
-                    viewModel.isGenerating -> stringResource(R.string.dialog_generating)
-                    viewModel.isSolving -> stringResource(R.string.dialog_solving)
-                    else -> ""
-                }
-            )
-        }
 
-        if (continueGameDialog) {
-            AlertDialog(
-                title = { Text(stringResource(R.string.dialog_new_game)) },
-                text = { Text(stringResource(R.string.dialog_new_game_text)) },
-                confirmButton = {
-                    TextButton(onClick = {
-                        continueGameDialog = false
-                        viewModel.giveUpLastGame()
-                        viewModel.startGame()
-                    }) {
-                        Text(stringResource(R.string.dialog_new_game_positive))
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { continueGameDialog = false }) {
-                        Text(stringResource(R.string.action_cancel))
-                    }
-                },
-                onDismissRequest = {
-                    continueGameDialog = false
-                }
-            )
-        }
-
-        if (lastGamesBottomSheet) {
-            ModalBottomSheet(onDismissRequest = { lastGamesBottomSheet = false }) {
-                Text(
-                    text = pluralStringResource(
-                        id = R.plurals.last_x_games,
-                        count = lastGames.size,
-                        lastGames.size
-                    ),
-                    modifier = Modifier.padding(start = 12.dp),
-                    style = MaterialTheme.typography.titleLarge
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                ScrollbarLazyColumn(
-                    contentPadding = PaddingValues(horizontal = 6.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.clip(MaterialTheme.shapes.large)
-                ) {
-                    items(lastGames.toList()) { item ->
-                        SavedSudokuPreview(
-                            board = item.first.currentBoard,
-                            difficulty = stringResource(item.second.difficulty.resName),
-                            type = stringResource(item.second.type.resName),
-                            savedGame = item.first,
-                            onClick = {
-                                navigator.navigate(
-                                    GameScreenDestination(
-                                        gameUid = item.first.uid,
-                                        playedBefore = true
-                                    )
-                                )
-                                lastGamesBottomSheet = false
-                            }
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -328,7 +179,6 @@ fun SavedSudokuPreview(
     board: String,
     difficulty: String,
     type: String,
-    savedGame: SavedGame,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = { }
 ) {
@@ -359,26 +209,6 @@ fun SavedSudokuPreview(
                         .padding(horizontal = 12.dp)
                 ) {
                     Text("$difficulty $type")
-                    Text(
-                        text = stringResource(
-                            R.string.history_item_time,
-                            savedGame.timer
-                                .toKotlinDuration()
-                                .toFormattedString()
-                        )
-                    )
-                    if (savedGame.lastPlayed != null) {
-                        val lastPlayedRelative by remember(savedGame) {
-                            mutableStateOf(
-                                DateUtils.getRelativeTimeSpanString(
-                                    savedGame.lastPlayed.toEpochSecond() * 1000L,
-                                    ZonedDateTime.now().toEpochSecond() * 1000L,
-                                    DateUtils.MINUTE_IN_MILLIS
-                                ).toString()
-                            )
-                        }
-                        Text(lastPlayedRelative)
-                    }
                 }
             }
             IconButton(
