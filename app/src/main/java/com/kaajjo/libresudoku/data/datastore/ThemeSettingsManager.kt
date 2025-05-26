@@ -129,7 +129,7 @@ class ThemeSettingsManager @Inject constructor(@ApplicationContext context: Cont
     }
 
     val isUserDefinedSeedColor = dataStore.data.map { prefs ->
-        prefs[isUserDefinedSeedColorKey] ?: false
+        prefs[isUserDefinedSeedColorKey] == true
     }
 
 
@@ -146,10 +146,6 @@ class ThemeSettingsManager @Inject constructor(@ApplicationContext context: Cont
             PaletteStyle.Content to 8,
         )
 
-        fun getPaletteStyle(index: Int) =
-            if (index in paletteStyles.indices) paletteStyles[index].first else paletteStyles[0].first
 
-        fun getPaletteIndex(paletteStyle: PaletteStyle, default: Int = 0) =
-            paletteStyles.find { it.first == paletteStyle }?.second ?: default
-    }
+     }
 }
