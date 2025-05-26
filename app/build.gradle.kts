@@ -23,9 +23,6 @@ android {
             useSupportLibrary = true
         }
 
-        ksp {
-            arg("room.schemaLocation", "${projectDir}/schemas")
-        }
     }
 
     // F-Droid
@@ -99,10 +96,7 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.hilt.navigation)
     ksp(libs.hilt.compiler)
-
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+    
 
     implementation(libs.datastore.preferences)
 
